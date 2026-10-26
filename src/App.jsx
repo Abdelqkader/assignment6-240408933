@@ -1,10 +1,12 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { fetchPosts } from './api/postsApi.js'
 import { initialState, postsReducer } from './reducer/postsReducer.js'
 import PostList from './components/PostList.jsx'
+import FilterForm from './components/FilterForm.jsx'
 
 function App() {
   const [state, dispatch] = useReducer(postsReducer, initialState)
+  const [filter, setFilter] = useState('')
 
   // Fetch once on mount. The AbortController cancels the request if the
   // component unmounts, so no state update happens after unmount.
@@ -27,18 +29,23 @@ function App() {
     return () => controller.abort()
   }, [])
 
+  // Derived during render: only the source posts are stored in state.
+  const query = filter.trim().toLowerCase()
+  const visiblePosts = state.posts.filter((post) => post.title.toLowerCase().includes(query))
+
   return (
     <div>
       <h1>Post Dashboard</h1>
+      <FilterForm filter={filter} onFilterChange={setFilter} />
       {state.loading && <p>Loading posts...</p>}
 
       {!state.loading && state.error && (
         <p style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
       )}
 
-      {!state.loading && !state.error && state.posts.length === 0 && <p>No posts found.</p>}
+      {!state.loading && !state.error && visiblePosts.length === 0 && <p>No posts found.</p>}
 
-      {!state.loading && !state.error && state.posts.length > 0 && <PostList posts={state.posts} />}
+      {!state.loading && !state.error && visiblePosts.length > 0 && <PostList posts={visiblePosts} />}
     </div>
   )
 }
