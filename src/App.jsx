@@ -30,7 +30,15 @@ function App() {
   return (
     <div>
       <h1>Post Dashboard</h1>
-      <PostList posts={state.posts} />
+      {state.loading && <p>Loading posts...</p>}
+
+      {!state.loading && state.error && (
+        <p style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
+      )}
+
+      {!state.loading && !state.error && state.posts.length === 0 && <p>No posts found.</p>}
+
+      {!state.loading && !state.error && state.posts.length > 0 && <PostList posts={state.posts} />}
     </div>
   )
 }
