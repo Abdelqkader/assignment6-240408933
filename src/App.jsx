@@ -40,11 +40,11 @@ function App() {
       <h1 style={{ marginBottom: 4 }}>Post Dashboard</h1>
       <p style={{ marginTop: 0, color: '#555' }}>Posts loaded from JSONPlaceholder</p>
       <FilterForm filter={filter} onFilterChange={setFilter} />
-      {state.loading && <p>Loading posts...</p>}
+      {state.loading && <p role="status">Loading posts...</p>}
 
       {!state.loading && state.error && (
         <div>
-          <p style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
+          <p role="alert" style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
           <button type="button" onClick={() => setReloadCount((count) => count + 1)}>
             Try again
           </button>
@@ -54,7 +54,7 @@ function App() {
       {!state.loading && !state.error && visiblePosts.length === 0 && <p>No posts found.</p>}
 
       {!state.loading && !state.error && state.posts.length > 0 && (
-        <p style={{ color: '#555' }}>
+        <p aria-live="polite" style={{ color: '#555' }}>
           Showing {visiblePosts.length} of {state.posts.length} posts
         </p>
       )}

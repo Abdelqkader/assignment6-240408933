@@ -5,7 +5,8 @@ function FilterForm({ filter, onFilterChange }) {
       <label>
         Filter by title:{' '}
         <input
-          type="text"
+          type="search"
+          aria-label="Filter posts by title"
           value={filter}
           onChange={(e) => onFilterChange(e.target.value)}
           placeholder="Type part of a title"
