@@ -7,8 +7,10 @@ import FilterForm from './components/FilterForm.jsx'
 function App() {
   const [state, dispatch] = useReducer(postsReducer, initialState)
   const [filter, setFilter] = useState('')
+  // Changing this number re-runs the fetch effect (used by the "Try again" button).
+  const [reloadCount, setReloadCount] = useState(0)
 
-  // Fetch once on mount. The AbortController cancels the request if the
+  // Fetch on mount (and again when the user asks to retry). The AbortController cancels the request if the
   // component unmounts, so no state update happens after unmount.
   useEffect(() => {
     const controller = new AbortController()
@@ -27,7 +29,7 @@ function App() {
     loadPosts()
 
     return () => controller.abort()
-  }, [])
+  }, [reloadCount])
 
   // Derived during render: only the source posts are stored in state.
   const query = filter.trim().toLowerCase()
@@ -41,7 +43,12 @@ function App() {
       {state.loading && <p>Loading posts...</p>}
 
       {!state.loading && state.error && (
-        <p style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
+        <div>
+          <p style={{ color: 'crimson' }}>Could not load posts: {state.error}</p>
+          <button type="button" onClick={() => setReloadCount((count) => count + 1)}>
+            Try again
+          </button>
+        </div>
       )}
 
       {!state.loading && !state.error && visiblePosts.length === 0 && <p>No posts found.</p>}
