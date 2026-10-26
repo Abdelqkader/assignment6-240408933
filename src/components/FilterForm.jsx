@@ -10,7 +10,12 @@ function FilterForm({ filter, onFilterChange }) {
           onChange={(e) => onFilterChange(e.target.value)}
           placeholder="Type part of a title"
         />
-      </label>
+      </label>{' '}
+      {filter !== '' && (
+        <button type="button" onClick={() => onFilterChange('')}>
+          Clear
+        </button>
+      )}
     </form>
   )
 }
