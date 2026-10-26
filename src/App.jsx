@@ -34,8 +34,9 @@ function App() {
   const visiblePosts = state.posts.filter((post) => post.title.toLowerCase().includes(query))
 
   return (
-    <div>
-      <h1>Post Dashboard</h1>
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: 24, fontFamily: 'system-ui, sans-serif' }}>
+      <h1 style={{ marginBottom: 4 }}>Post Dashboard</h1>
+      <p style={{ marginTop: 0, color: '#555' }}>Posts loaded from JSONPlaceholder</p>
       <FilterForm filter={filter} onFilterChange={setFilter} />
       {state.loading && <p>Loading posts...</p>}
 
