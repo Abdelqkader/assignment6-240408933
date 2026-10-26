@@ -32,8 +32,14 @@ Then open the address Vite prints (usually http://localhost:5173).
     during render from `state.posts`; it is never stored in state.
   - Conditional rendering for "Loading posts...", the error message, "No posts found."
     and the list.
+  - `reloadCount` (`useState(0)`) is in the effect's dependency array; the "Try again"
+    button on the error message increases it, so the same effect fetches again.
+  - Under the filter it shows "Showing X of Y posts", also derived during render.
+  - `role="status"`, `role="alert"` and `aria-live` let screen readers announce the
+    loading message, the error and the result count.
 - `src/components/FilterForm.jsx`: a controlled input (`value` + `onChange`) for the
-  title filter. The value lives in `App`.
+  title filter. The value lives in `App`. A "Clear" button appears when the filter is
+  not empty and resets it to `''`.
 - `src/components/PostList.jsx`: pure render component. Receives `posts` as props and
   renders one `Post` per item with `.map()`, using the post `id` as the key.
 - `src/components/Post.jsx`: presentational component that shows `title` and `body`.
@@ -50,5 +56,8 @@ Then open the address Vite prints (usually http://localhost:5173).
   `response.ok` and throwing makes those errors show up in the UI.
 - Derived state: it was tempting to keep a `filteredPosts` state, but that duplicates data
   and can get out of sync. Filtering during render keeps only the source posts in state.
+- Retrying without breaking the rules: the fetch must stay inside `useEffect`, so the
+  button does not call `fetchPosts` itself. It only changes `reloadCount`, and the effect
+  (with its cleanup) runs again.
 - Showing the right message: the empty message has to depend on the filtered list, and
   only when we are not loading and there is no error.
