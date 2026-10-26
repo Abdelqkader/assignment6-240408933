@@ -25,7 +25,7 @@ Then open the address Vite prints (usually http://localhost:5173).
   `FETCH_ERROR` by returning new objects (spread), never mutating the old state.
 - `src/App.jsx`: owns the state and coordinates the children.
   - `useReducer(postsReducer, initialState)` for the async state.
-  - `useEffect(..., [])` fetches once on mount: dispatches `FETCH_START`, then
+  - `useEffect(..., [reloadCount])` fetches on mount (and on retry): dispatches `FETCH_START`, then
     `FETCH_SUCCESS` or `FETCH_ERROR` inside `try/catch`. The cleanup function aborts the
     request with an `AbortController`, so nothing is dispatched after unmount.
   - `useState('')` for the filter text. The filtered list (`visiblePosts`) is computed
