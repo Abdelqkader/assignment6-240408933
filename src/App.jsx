@@ -46,6 +46,12 @@ function App() {
 
       {!state.loading && !state.error && visiblePosts.length === 0 && <p>No posts found.</p>}
 
+      {!state.loading && !state.error && state.posts.length > 0 && (
+        <p style={{ color: '#555' }}>
+          Showing {visiblePosts.length} of {state.posts.length} posts
+        </p>
+      )}
+
       {!state.loading && !state.error && visiblePosts.length > 0 && <PostList posts={visiblePosts} />}
     </div>
   )
